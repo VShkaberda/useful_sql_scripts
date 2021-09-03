@@ -10,6 +10,9 @@ SELECT @XMLBuildScript='SELECT @AttributeBasedXMLList = ( SELECT x AS "@x" FROM 
 EXEC sp_executesql @XMLBuildScript, N'@AttributeBasedXMLList XML OUT',
                     @AttributeBasedXMLList OUT
 
+-- create attribute based XMLList directly from table
+SELECT @AttributeBasedXMLList = (SELECT [i] AS "@x" FROM [table] FOR XML PATH('y'), ROOT('root'), TYPE )
+
 -- select to parse attribute based XMLList into table
 SELECT x.y.value('.','int')
 FROM @AttributeBasedXMLList.nodes('root/y/@x') AS x( y )
